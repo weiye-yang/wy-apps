@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
+import sys
 
 from zeep import Client, Settings, xsd
 from zeep.plugins import HistoryPlugin
@@ -50,7 +51,7 @@ class OpenLDBWSClient:
         )
 
 
-def main(crs_from, crs_to):
+def departure_board(crs_from, crs_to):
     client = OpenLDBWSClient()
     res = client.get_departures(crs_from=crs_from, crs_to=crs_to)
     services = res.trainServices.service
@@ -58,13 +59,18 @@ def main(crs_from, crs_to):
     print(f"Direct trains from {res.locationName} to {res.filterLocationName}:")
     for departure in services:
         calling_points = departure.subsequentCallingPoints.callingPointList[0].callingPoint
-        arrival = [a for a in calling_points if a.crs == to][0]
+        arrival = [a for a in calling_points if a.crs == crs_to][0]
         print(f"Departing {departure.std} - {departure.etd}, arriving {arrival.st} - {arrival.et}")
 
 
-if __name__ == "__main__":
+def main():
     # http://www.railwaycodes.org.uk/crs/crs0.shtm
     fr = "MAI"
     to = "PAD"
     # fr, to = to, fr
-    main(crs_from=fr, crs_to=to)
+    departure_board(crs_from=fr, crs_to=to)
+    input("Stop?")
+
+
+if __name__ == "__main__":
+    main()
