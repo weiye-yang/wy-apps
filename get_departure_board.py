@@ -18,10 +18,14 @@ def departure_board(crs_from: str, crs_to: str):
         arrival = [a for a in calling_points if a.crs == crs_to][0]
 
         departure_time = expected_time(departure.std, departure.etd)
+        expected_str = "expected"
+        if departure_time != departure.std:
+            expected_str = expected_str.upper()
         arrival_time = expected_time(arrival.st, arrival.et)
         duration = minutes_diff(departure_time, arrival_time)
-        print(f"{departure.std} - Expected {departure_time}; Expected arrival {arrival_time}; {duration} mins")
+        print(f"{departure.std} - {expected_str} {departure_time}; arrival {arrival_time}; {duration} mins")
     input("Press Enter to exit...")
+
 
 
 if __name__ == "__main__":

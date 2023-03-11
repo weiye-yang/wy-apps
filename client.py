@@ -42,13 +42,15 @@ def parse_time(hhmm: str) -> dt.time:
     return dt.time(int(parts[0]), int(parts[1]))
 
 
-def minutes_diff(after: str, before: str) -> int:
-    after_time = parse_time(after)
+def minutes_diff(before: str, after: str) -> int:
     before_time = parse_time(before)
+    after_time = parse_time(after)
+
     # Arbitrary date. But if after time is earlier, then assume it is the next day
     before_dt = dt.datetime.combine(dt.date(1, 1, 1), before_time)
     after_date = dt.date(1, 1, 2) if after_time < before_time else dt.date(1, 1, 1)
     after_dt = dt.datetime.combine(after_date, after_time)
+
     td = after_dt - before_dt
     return td.seconds // 60
 
