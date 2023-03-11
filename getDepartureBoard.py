@@ -20,33 +20,39 @@ from zeep import Client, Settings, xsd
 from zeep.plugins import HistoryPlugin
 
 
+class OpenLDBWSClient:
+    def __init__(self):
+        # Let's not include my token in the repo
+        filename = r"C:\Users\User\OneDrive\Documents\OpenLDBWS.txt"
+        with open(filename) as f:
+            content = f.readlines()
+        if len(content) != 1:
+            raise ValueError(f"Expecting only one line in file '{filename}'. Instead have {len(content)}")
+        header = xsd.Element(
+            "{http://thalesgroup.com/RTTI/2013-11-28/Token/types}AccessToken",
+            xsd.ComplexType([
+                xsd.Element(
+                    "{http://thalesgroup.com/RTTI/2013-11-28/Token/types}TokenValue",
+                    xsd.String()),
+            ])
+        )
+        self._soap_headers = [header(TokenValue=content[0])]
+
+        wsdl = "http://lite.realtime.nationalrail.co.uk/OpenLDBWS/wsdl.aspx?ver=2021-11-01"
+        self._client = Client(wsdl=wsdl, settings=Settings(strict=False), plugins=[HistoryPlugin()])
+
+    def get_departures(self, crs_from, crs_to):
+        return self._client.service.GetDepBoardWithDetails(
+            numRows=20,
+            crs=crs_from,
+            filterCrs=crs_to,
+            _soapheaders=self._soap_headers
+        )
+
+
 def main(crs_from, crs_to):
-
-    # Let's not include my token in the repo
-    filename = r"C:\Users\User\OneDrive\Documents\OpenLDBWS.txt"
-    with open(filename) as f:
-        content = f.readlines()
-    if len(content) != 1:
-        raise ValueError(f"Expecting only one line in file '{filename}'. Instead have {len(content)}")
-
-    wsdl = "http://lite.realtime.nationalrail.co.uk/OpenLDBWS/wsdl.aspx?ver=2021-11-01"
-    client = Client(wsdl=wsdl, settings=Settings(strict=False), plugins=[HistoryPlugin()])
-
-    header = xsd.Element(
-        "{http://thalesgroup.com/RTTI/2013-11-28/Token/types}AccessToken",
-        xsd.ComplexType([
-            xsd.Element(
-                "{http://thalesgroup.com/RTTI/2013-11-28/Token/types}TokenValue",
-                xsd.String()),
-        ])
-    )
-
-    res = client.service.GetDepBoardWithDetails(
-        numRows=20,
-        crs=crs_from,
-        filterCrs=crs_to,
-        _soapheaders=[header(TokenValue=content[0])]
-    )
+    client = OpenLDBWSClient()
+    res = client.get_departures(crs_from=crs_from, crs_to=crs_to)
     services = res.trainServices.service
 
     print(f"Direct trains from {res.locationName} to {res.filterLocationName}:")
