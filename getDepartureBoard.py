@@ -20,7 +20,7 @@ from zeep import Client, Settings, xsd
 from zeep.plugins import HistoryPlugin
 
 
-def main(crs):
+def main(crs_from, crs_to):
 
     # Let's not include my token in the repo
     filename = r"C:\Users\User\OneDrive\Documents\OpenLDBWS.txt"
@@ -41,7 +41,12 @@ def main(crs):
         ])
     )
 
-    res = client.service.GetDepartureBoard(numRows=10, crs=crs, _soapheaders=[header(TokenValue=content[0])])
+    res = client.service.GetDepBoardWithDetails(
+        numRows=10,
+        crs=crs_from,
+        filterCrs=crs_to,
+        _soapheaders=[header(TokenValue=content[0])]
+    )
     services = res.trainServices.service
 
     print("Trains at " + res.locationName)
@@ -52,5 +57,7 @@ def main(crs):
 
 if __name__ == "__main__":
     # http://www.railwaycodes.org.uk/crs/crs0.shtm
-    crs = "PAD"  # Paddington
-    main(crs=crs)
+    fr = "PAD"
+    to = "MAI"
+    # fr, to = to, fr
+    main(crs_from=fr, crs_to=to)
