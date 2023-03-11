@@ -69,7 +69,7 @@ def main():
     to = "PAD"
     # fr, to = to, fr
     departure_board(crs_from=fr, crs_to=to)
-    input("Stop?")
+    input("Press Enter to exit...")
 
 
 if __name__ == "__main__":
