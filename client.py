@@ -2,7 +2,7 @@ import datetime as dt
 from time import sleep
 from typing import Callable
 
-from zeep import xsd, Client, Settings
+from zeep import Client, Settings, xsd
 from zeep.plugins import HistoryPlugin
 
 

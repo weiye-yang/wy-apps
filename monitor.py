@@ -1,9 +1,7 @@
 import argparse
 import datetime as dt
-from time import sleep
-from typing import List
 
-from client import OpenLDBWSClient, minutes_diff, expected_time, parse_time
+from client import OpenLDBWSClient, expected_time, minutes_diff, parse_time
 
 
 def monitor(crs_from: str, crs_to: str, scheduled: str) -> None:

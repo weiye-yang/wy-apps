@@ -2,7 +2,7 @@ import argparse
 import datetime as dt
 from typing import List
 
-from client import OpenLDBWSClient, minutes_diff, expected_time
+from client import OpenLDBWSClient, expected_time, minutes_diff
 
 
 def departure_board(crs_from: str, crs_to: str) -> None:
