@@ -1,13 +1,18 @@
 import argparse
+from datetime import datetime
+from typing import List
+
 from client import OpenLDBWSClient
 
 
 def departure_board(crs_from, crs_to):
     client = OpenLDBWSClient()
     res = client.get_departures(crs_from=crs_from, crs_to=crs_to)
-    services = res.trainServices.service
+    generation_time: datetime = res.generatedAt
+    datetime_str = generation_time.strftime("%X")
+    print(f"[{datetime_str}] Direct trains from {res.locationName} to {res.filterLocationName}:")
 
-    print(f"Direct trains from {res.locationName} to {res.filterLocationName}:")
+    services: List = res.trainServices.service
     for departure in services:
         calling_points = departure.subsequentCallingPoints.callingPointList[0].callingPoint
         arrival = [a for a in calling_points if a.crs == crs_to][0]
