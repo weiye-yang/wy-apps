@@ -49,15 +49,14 @@ def main(crs_from, crs_to):
     )
     services = res.trainServices.service
 
-    print("Trains at " + res.locationName)
-    print("===============================================================================")
+    print(f"Trains from {res.locationName} to {res.filterLocationName}:")
     for t in services:
-        print(t.std + " to " + t.destination.location[0].locationName + " - " + t.etd)
+        print(f"{t.std} to {t.destination.location[0].locationName} - {t.etd}")
 
 
 if __name__ == "__main__":
     # http://www.railwaycodes.org.uk/crs/crs0.shtm
-    fr = "PAD"
-    to = "MAI"
+    fr = "MAI"
+    to = "PAD"
     # fr, to = to, fr
     main(crs_from=fr, crs_to=to)
