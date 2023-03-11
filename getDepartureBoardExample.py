@@ -19,29 +19,31 @@
 from zeep import Client, Settings, xsd
 from zeep.plugins import HistoryPlugin
 
-LDB_TOKEN = ''
-WSDL = 'http://lite.realtime.nationalrail.co.uk/OpenLDBWS/wsdl.aspx?ver=2021-11-01'
+# Let's not include my token in the repo
+filename = r"C:\Users\User\OneDrive\Documents\OpenLDBWS.txt"
+with open(filename) as f:
+    content = f.readlines()
+if len(content) != 1:
+    raise ValueError(f"Expecting only one line in file '{filename}'. Instead have {len(content)}")
 
-if LDB_TOKEN == '':
-    raise Exception("Please configure your OpenLDBWS token in getDepartureBoardExample!")
+LDB_TOKEN = content[0]
+WSDL = "http://lite.realtime.nationalrail.co.uk/OpenLDBWS/wsdl.aspx?ver=2021-11-01"
 
 settings = Settings(strict=False)
-
 history = HistoryPlugin()
-
 client = Client(wsdl=WSDL, settings=settings, plugins=[history])
 
 header = xsd.Element(
-    '{http://thalesgroup.com/RTTI/2013-11-28/Token/types}AccessToken',
+    "{http://thalesgroup.com/RTTI/2013-11-28/Token/types}AccessToken",
     xsd.ComplexType([
         xsd.Element(
-            '{http://thalesgroup.com/RTTI/2013-11-28/Token/types}TokenValue',
+            "{http://thalesgroup.com/RTTI/2013-11-28/Token/types}TokenValue",
             xsd.String()),
     ])
 )
 header_value = header(TokenValue=LDB_TOKEN)
 
-res = client.service.GetDepartureBoard(numRows=10, crs='EUS', _soapheaders=[header_value])
+res = client.service.GetDepartureBoard(numRows=10, crs="PAD", _soapheaders=[header_value])
 
 print("Trains at " + res.locationName)
 print("===============================================================================")
