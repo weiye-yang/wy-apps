@@ -20,7 +20,7 @@ from zeep import Client, Settings, xsd
 from zeep.plugins import HistoryPlugin
 
 
-def main():
+def main(crs):
 
     # Let's not include my token in the repo
     filename = r"C:\Users\User\OneDrive\Documents\OpenLDBWS.txt"
@@ -29,12 +29,8 @@ def main():
     if len(content) != 1:
         raise ValueError(f"Expecting only one line in file '{filename}'. Instead have {len(content)}")
 
-    ldb_token = content[0]
     wsdl = "http://lite.realtime.nationalrail.co.uk/OpenLDBWS/wsdl.aspx?ver=2021-11-01"
-
-    settings = Settings(strict=False)
-    history = HistoryPlugin()
-    client = Client(wsdl=wsdl, settings=settings, plugins=[history])
+    client = Client(wsdl=wsdl, settings=Settings(strict=False), plugins=[HistoryPlugin()])
 
     header = xsd.Element(
         "{http://thalesgroup.com/RTTI/2013-11-28/Token/types}AccessToken",
@@ -44,21 +40,17 @@ def main():
                 xsd.String()),
         ])
     )
-    header_value = header(TokenValue=ldb_token)
 
-    res = client.service.GetDepartureBoard(numRows=10, crs="PAD", _soapheaders=[header_value])
+    res = client.service.GetDepartureBoard(numRows=10, crs=crs, _soapheaders=[header(TokenValue=content[0])])
+    services = res.trainServices.service
 
     print("Trains at " + res.locationName)
     print("===============================================================================")
-
-    services = res.trainServices.service
-
-    i = 0
-    while i < len(services):
-        t = services[i]
+    for t in services:
         print(t.std + " to " + t.destination.location[0].locationName + " - " + t.etd)
-        i += 1
 
 
 if __name__ == "__main__":
-    main()
+    # http://www.railwaycodes.org.uk/crs/crs0.shtm
+    crs = "PAD"  # Paddington
+    main(crs=crs)
