@@ -42,16 +42,18 @@ def main(crs_from, crs_to):
     )
 
     res = client.service.GetDepBoardWithDetails(
-        numRows=10,
+        numRows=20,
         crs=crs_from,
         filterCrs=crs_to,
         _soapheaders=[header(TokenValue=content[0])]
     )
     services = res.trainServices.service
 
-    print(f"Trains from {res.locationName} to {res.filterLocationName}:")
-    for t in services:
-        print(f"{t.std} to {t.destination.location[0].locationName} - {t.etd}")
+    print(f"Direct trains from {res.locationName} to {res.filterLocationName}:")
+    for departure in services:
+        calling_points = departure.subsequentCallingPoints.callingPointList[0].callingPoint
+        arrival = [a for a in calling_points if a.crs == to][0]
+        print(f"Departing {departure.std} - {departure.etd}, arriving {arrival.st} - {arrival.et}")
 
 
 if __name__ == "__main__":
