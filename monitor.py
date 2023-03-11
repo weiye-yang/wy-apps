@@ -14,8 +14,9 @@ def monitor(crs_from: str, crs_to: str, scheduled: str) -> None:
         res = client.get_departures(crs_from=crs_from, crs_to=crs_to)
         generation_time: dt.datetime = res.generatedAt
         datetime_str = generation_time.strftime("%X")
-
         service = [d for d in res.trainServices.service if d.std == scheduled]
+
+        print("")
         if len(service) == 0:
             print(f"[{datetime_str}] No {scheduled} service from {res.locationName} to {res.filterLocationName} found")
             break
@@ -27,7 +28,7 @@ def monitor(crs_from: str, crs_to: str, scheduled: str) -> None:
         arrival = [a for a in calling_points if a.crs == crs_to][0]
         arrival_time = expected_time(arrival.st, arrival.et)
         duration = minutes_diff(departure_time, arrival_time)
-        print(f"{departure.etd}. Duration {duration} mins")
+        print(f"{departure.etd}. Journey duration {duration} mins")
     input("Press Enter to exit...")
 
 
