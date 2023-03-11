@@ -1,3 +1,4 @@
+import datetime as dt
 from zeep import xsd, Client, Settings
 from zeep.plugins import HistoryPlugin
 
@@ -6,7 +7,7 @@ FILENAME = r"C:\Users\User\OneDrive\Documents\OpenLDBWS.txt"
 
 
 class OpenLDBWSClient:
-    def __init__(self):
+    def __init__(self) -> None:
         with open(FILENAME) as f:
             content = f.readlines()
         if len(content) != 1:
@@ -25,10 +26,32 @@ class OpenLDBWSClient:
         wsdl = "http://lite.realtime.nationalrail.co.uk/OpenLDBWS/wsdl.aspx?ver=2021-11-01"
         self._client = Client(wsdl=wsdl, settings=Settings(strict=False), plugins=[HistoryPlugin()])
 
-    def get_departures(self, crs_from, crs_to):
+    def get_departures(self, crs_from: str, crs_to: str):
         return self._client.service.GetDepBoardWithDetails(
             numRows=20,
             crs=crs_from,
             filterCrs=crs_to,
             _soapheaders=self._soap_headers
         )
+
+
+def parse_time(hhmm: str) -> dt.time:
+    parts = hhmm.split(":")
+    if len(parts) != 2:
+        raise ValueError(f"Cannot parse time {hhmm}")
+    return dt.time(int(parts[0]), int(parts[1]))
+
+
+def minutes_diff(after: str, before: str) -> int:
+    after_time = parse_time(after)
+    before_time = parse_time(before)
+    # Arbitrary date. But if after time is earlier, then assume it is the next day
+    before_dt = dt.datetime.combine(dt.date(1, 1, 1), before_time)
+    after_date = dt.date(1, 1, 2) if after_time < before_time else dt.date(1, 1, 1)
+    after_dt = dt.datetime.combine(after_date, after_time)
+    td = after_dt - before_dt
+    return td.seconds // 60
+
+
+def expected_time(st: str, et: str) -> str:
+    return st if et == "On time" else et
