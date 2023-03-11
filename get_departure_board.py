@@ -5,7 +5,7 @@ from typing import List
 from client import OpenLDBWSClient, minutes_diff, expected_time
 
 
-def departure_board(crs_from: str, crs_to: str):
+def departure_board(crs_from: str, crs_to: str) -> None:
     client = OpenLDBWSClient()
     res = client.get_departures(crs_from=crs_from, crs_to=crs_to)
     generation_time: dt.datetime = res.generatedAt
@@ -18,14 +18,12 @@ def departure_board(crs_from: str, crs_to: str):
         arrival = [a for a in calling_points if a.crs == crs_to][0]
 
         departure_time = expected_time(departure.std, departure.etd)
-        expected_str = "expected"
-        if departure_time != departure.std:
-            expected_str = expected_str.upper()
+        expected_str = f"Expected {departure_time}" if departure_time != departure.std else "On time       "
+
         arrival_time = expected_time(arrival.st, arrival.et)
         duration = minutes_diff(departure_time, arrival_time)
-        print(f"{departure.std} - {expected_str} {departure_time}; arrival {arrival_time}; {duration} mins")
+        print(f"{departure.std} - {expected_str}; Arriving {arrival_time}; Duration {duration}")
     input("Press Enter to exit...")
-
 
 
 if __name__ == "__main__":
