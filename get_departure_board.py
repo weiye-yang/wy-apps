@@ -15,26 +15,28 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-import sys
 
 from zeep import Client, Settings, xsd
 from zeep.plugins import HistoryPlugin
 
 
+# One-line .txt containing token for the API. Let's not include it in the repo
+FILENAME = r"C:\Users\User\OneDrive\Documents\OpenLDBWS.txt"
+
+
 class OpenLDBWSClient:
     def __init__(self):
-        # Let's not include my token in the repo
-        filename = r"C:\Users\User\OneDrive\Documents\OpenLDBWS.txt"
-        with open(filename) as f:
+        with open(FILENAME) as f:
             content = f.readlines()
         if len(content) != 1:
-            raise ValueError(f"Expecting only one line in file '{filename}'. Instead have {len(content)}")
+            raise ValueError(f"Expecting only one line in file '{FILENAME}'. Instead have {len(content)}")
         header = xsd.Element(
             "{http://thalesgroup.com/RTTI/2013-11-28/Token/types}AccessToken",
             xsd.ComplexType([
                 xsd.Element(
                     "{http://thalesgroup.com/RTTI/2013-11-28/Token/types}TokenValue",
-                    xsd.String()),
+                    xsd.String()
+                )
             ])
         )
         self._soap_headers = [header(TokenValue=content[0])]
