@@ -5,6 +5,8 @@ from typing import Callable
 from zeep import Client, Settings, xsd
 from zeep.plugins import HistoryPlugin
 
+ON_TIME = "On time"
+
 
 class OpenLDBWSClient:
     # One-line .txt containing token for the API. Let's not include it in the repo
@@ -13,7 +15,7 @@ class OpenLDBWSClient:
 
     def __init__(self) -> None:
         with open(OpenLDBWSClient._filename) as f:
-            content = f.readlines()
+            content = [line.strip() for line in f.readlines()]
         if len(content) != 1:
             raise ValueError(f"Expecting only one line in file '{OpenLDBWSClient._filename}'. Instead have {len(content)}")
         header = xsd.Element(
@@ -75,4 +77,4 @@ def minutes_diff(before: str, after: str) -> int:
 
 
 def expected_time(st: str, et: str) -> str:
-    return st if et == "On time" else et
+    return st if et == ON_TIME else et
