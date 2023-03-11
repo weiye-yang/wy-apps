@@ -1,5 +1,6 @@
 import argparse
 import datetime as dt
+import os
 from typing import List
 
 from client import OpenLDBWSClient, expected_time, minutes_diff
@@ -23,7 +24,11 @@ def departure_board(crs_from: str, crs_to: str) -> None:
         arrival_time = expected_time(arrival.st, arrival.et)
         duration = minutes_diff(departure_time, arrival_time)
         print(f"{departure.std} - {expected_str}; Arriving {arrival_time}; Duration {duration}")
-    input("Press Enter to exit...")
+
+
+def main(crs_from: str, crs_to: str) -> None:
+    departure_board(crs_from=crs_from, crs_to=crs_to)
+    os.system("pause")
 
 
 if __name__ == "__main__":
@@ -32,4 +37,4 @@ if __name__ == "__main__":
     parser.add_argument("--fr", default="MAI")
     parser.add_argument("--to", default="PAD")
     args = parser.parse_args()
-    departure_board(crs_from=args.fr, crs_to=args.to)
+    main(crs_from=args.fr, crs_to=args.to)

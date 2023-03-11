@@ -1,11 +1,12 @@
 import argparse
 import datetime as dt
+import os
 
-from client import OpenLDBWSClient, expected_time, minutes_diff, parse_time
+from client import OpenLDBWSClient, expected_time, minutes_diff
+from get_departure_board import departure_board
 
 
 def monitor(crs_from: str, crs_to: str, scheduled: str) -> None:
-    scheduled_time = parse_time(scheduled)  # Check it's a valid time
     client = OpenLDBWSClient()
 
     while True:
@@ -27,7 +28,17 @@ def monitor(crs_from: str, crs_to: str, scheduled: str) -> None:
         arrival_time = expected_time(arrival.st, arrival.et)
         duration = minutes_diff(departure_time, arrival_time)
         print(f"{departure.etd}. Journey duration {duration} mins")
-    input("Press Enter to exit...")
+
+
+def main(crs_from: str, crs_to: str) -> None:
+    departure_board(crs_from=crs_from, crs_to=crs_to)
+    print("")
+    default_time = "10:21"
+    scheduled = input(f"Enter scheduled service to monitor as hh:mm [default {default_time}]:").strip()
+    if not scheduled:
+        scheduled = default_time
+    monitor(crs_from=crs_from, crs_to=crs_to, scheduled=scheduled)
+    os.system("pause")
 
 
 if __name__ == "__main__":
@@ -35,6 +46,5 @@ if __name__ == "__main__":
     # http://www.railwaycodes.org.uk/crs/crs0.shtm
     parser.add_argument("--fr", default="MAI")
     parser.add_argument("--to", default="PAD")
-    parser.add_argument("--time", default="14:37")
     args = parser.parse_args()
-    monitor(crs_from=args.fr, crs_to=args.to, scheduled=args.time)
+    main(crs_from=args.fr, crs_to=args.to)
