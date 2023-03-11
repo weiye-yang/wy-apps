@@ -28,7 +28,6 @@ def departure_board(crs_from: str, crs_to: str) -> None:
 
 def main(crs_from: str, crs_to: str) -> None:
     departure_board(crs_from=crs_from, crs_to=crs_to)
-    os.system("pause")
 
 
 if __name__ == "__main__":
@@ -38,3 +37,4 @@ if __name__ == "__main__":
     parser.add_argument("--to", default="PAD")
     args = parser.parse_args()
     main(crs_from=args.fr, crs_to=args.to)
+    os.system("pause")

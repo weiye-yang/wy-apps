@@ -51,7 +51,6 @@ def main(crs_from: str, crs_to: str, repeat_seconds: int) -> None:
     if not scheduled:
         scheduled = default_time
     monitor(crs_from=crs_from, crs_to=crs_to, scheduled=scheduled, repeat_seconds=repeat_seconds)
-    os.system("pause")
 
 
 if __name__ == "__main__":
@@ -62,3 +61,4 @@ if __name__ == "__main__":
     parser.add_argument("--repeat_seconds", type=int, default=0)
     args = parser.parse_args()
     main(crs_from=args.crs_from, crs_to=args.crs_to, repeat_seconds=args.repeat_seconds)
+    os.system("pause")
