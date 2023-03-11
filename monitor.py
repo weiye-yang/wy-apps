@@ -23,12 +23,14 @@ def monitor(crs_from: str, crs_to: str, scheduled: str) -> None:
         print(f"[{datetime_str}] Status of {scheduled} service from {res.locationName} to {res.filterLocationName}:")
         departure = service[0]
         departure_time = expected_time(departure.std, departure.etd)
+        print(f"Expected departure: {departure_time}")
+
         calling_points = departure.subsequentCallingPoints.callingPointList[0].callingPoint
         arrival = [a for a in calling_points if a.crs == crs_to][0]
         arrival_time = expected_time(arrival.st, arrival.et)
-        duration = minutes_diff(departure_time, arrival_time)
-        print(f"Expected departure: {departure.etd}")
-        print(f"Journey duration: {duration} minutes")
+        print(f"Expected arrival: {arrival_time}")
+
+        print(f"Journey duration: {minutes_diff(departure_time, arrival_time)} minutes")
 
 
 def main(crs_from: str, crs_to: str) -> None:
