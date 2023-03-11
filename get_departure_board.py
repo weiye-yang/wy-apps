@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
+import argparse
 
 from zeep import Client, Settings, xsd
 from zeep.plugins import HistoryPlugin
@@ -63,16 +64,13 @@ def departure_board(crs_from, crs_to):
         calling_points = departure.subsequentCallingPoints.callingPointList[0].callingPoint
         arrival = [a for a in calling_points if a.crs == crs_to][0]
         print(f"Departing {departure.std} - {departure.etd}, arriving {arrival.st} - {arrival.et}")
-
-
-def main():
-    # http://www.railwaycodes.org.uk/crs/crs0.shtm
-    fr = "MAI"
-    to = "PAD"
-    # fr, to = to, fr
-    departure_board(crs_from=fr, crs_to=to)
     input("Press Enter to exit...")
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    # http://www.railwaycodes.org.uk/crs/crs0.shtm
+    parser.add_argument("--fr", default="MAI")
+    parser.add_argument("--to", default="PAD")
+    args = parser.parse_args()
+    departure_board(crs_from=args.fr, crs_to=args.to)
