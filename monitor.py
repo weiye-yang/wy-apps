@@ -17,24 +17,25 @@ def monitor(crs_from: str, crs_to: str, scheduled: str) -> None:
 
         print("")
         if len(service) == 0:
-            print(f"[{datetime_str}] No {scheduled} service from {res.locationName} to {res.filterLocationName} found")
+            print(f"[{datetime_str}] No service from {res.locationName} to {res.filterLocationName} scheduled at time {scheduled}")
             break
 
-        print(f"[{datetime_str}] Details of {scheduled} service from {res.locationName} to {res.filterLocationName}:")
+        print(f"[{datetime_str}] Status of {scheduled} service from {res.locationName} to {res.filterLocationName}:")
         departure = service[0]
         departure_time = expected_time(departure.std, departure.etd)
         calling_points = departure.subsequentCallingPoints.callingPointList[0].callingPoint
         arrival = [a for a in calling_points if a.crs == crs_to][0]
         arrival_time = expected_time(arrival.st, arrival.et)
         duration = minutes_diff(departure_time, arrival_time)
-        print(f"{departure.etd}. Journey duration {duration} mins")
+        print(f"Expected departure: {departure.etd}")
+        print(f"Journey duration: {duration} minutes")
 
 
 def main(crs_from: str, crs_to: str) -> None:
     departure_board(crs_from=crs_from, crs_to=crs_to)
     print("")
     default_time = "10:21"
-    scheduled = input(f"Enter scheduled service to monitor as hh:mm [default {default_time}]:").strip()
+    scheduled = input(f"Enter scheduled time to monitor as hh:mm [default {default_time}]: ").strip()
     if not scheduled:
         scheduled = default_time
     monitor(crs_from=crs_from, crs_to=crs_to, scheduled=scheduled)

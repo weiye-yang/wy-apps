@@ -37,7 +37,7 @@ class OpenLDBWSClient:
             time_since_last = dt.datetime.now() - self._last_request
             if time_since_last.seconds < OpenLDBWSClient._request_delay:
                 sleep_seconds = OpenLDBWSClient._request_delay
-                print(f"Sleeping for {sleep_seconds} seconds...")
+                print(f"Sleeping for {sleep_seconds} seconds")
                 sleep(sleep_seconds)
             res = func(self, *args, **kwargs)
             self._last_request = dt.datetime.now()
@@ -76,5 +76,3 @@ def minutes_diff(before: str, after: str) -> int:
 
 def expected_time(st: str, et: str) -> str:
     return st if et == "On time" else et
-
-

@@ -23,7 +23,7 @@ def departure_board(crs_from: str, crs_to: str) -> None:
 
         arrival_time = expected_time(arrival.st, arrival.et)
         duration = minutes_diff(departure_time, arrival_time)
-        print(f"{departure.std} - {expected_str}; Arriving {arrival_time}; Duration {duration}")
+        print(f"Scheduled {departure.std} - {expected_str}; Arriving {arrival_time}; Duration {duration} mins")
 
 
 def main(crs_from: str, crs_to: str) -> None:
