@@ -5,7 +5,7 @@ from time import sleep
 
 from client import ON_TIME, OpenLDBWSClient, expected_time, minutes_diff
 from get_departure_board import departure_board
-from notifier import Notifier
+from notifier import pushover_notify
 
 
 def monitor(
@@ -15,8 +15,6 @@ def monitor(
         repeat_seconds: int,
 ) -> None:
     client = OpenLDBWSClient()
-    notifier = Notifier()
-
     while True:
         res = client.get_departures(crs_from=crs_from, crs_to=crs_to)
         generation_time: dt.datetime = res.generatedAt
@@ -41,7 +39,7 @@ def monitor(
         print(f"Journey duration: {minutes_diff(departure_time, arrival_time)} minutes")
 
         if departure.etd != ON_TIME:
-            notifier.notify(f"{crs_from}->{crs_to} {scheduled} service delayed; expected {departure.etd}")
+            pushover_notify(f"{crs_from}->{crs_to} {scheduled} service delayed; expected {departure.etd}")
 
         print(f"Sleeping for {repeat_seconds} seconds...")
         sleep(repeat_seconds)
