@@ -1,24 +1,23 @@
-OpenLDBWS Python Example
+OpenLDBWS Rail Tools
 ========================
 
-This repository contains examples of how to use the National Rail Live
+This repository uses the National Rail Live
 Departure Boards Web Service (OpenLDBWS), located at the following URL:
-
 * https://lite.realtime.nationalrail.co.uk/OpenLDBWS/
 
 To use the service, you will need a token which is available by
 signing up at the following URL:
-
 * https://realtime.nationalrail.co.uk/OpenLDBWSRegistration/
 
-Edit `getDepartureBoardExample.py` and set `LDB_TOKEN` to your own token.
+You will need to add this as an `API_TOKEN` environment variable. You can add it to
+a `.env` file in the root directory which is loaded into the environment variables
+by the `python-dotenv` package.
 
-Install dependencies using `pip`:
+For phone push notifications, you will also need to set up a Pushover account:
+* https://pushover.net/
 
-`pip install -r requirements.txt`  
-
-Running `getDepartureBoardExample.py` will show you departures for
-London Euston.
+And add the token and user id as environment variables `PUSHOVER_TOKEN` and 
+`PUSHOVER_USER` respectively.
 
 Updating the WSDL
 -----------------
@@ -28,8 +27,7 @@ Periodically, a new version of the WSDL will be released at:
 * https://lite.realtime.nationalrail.co.uk/OpenLDBWS/
 
 This code is written for version 2021-11-01.  To update it to use a
-later version, edit `getDepartureBoardExample.py` and change the `WSDL`
-variable.  
+later version, edit `client.py` and change the `wsdl` argument.  
 
 Support
 -------
