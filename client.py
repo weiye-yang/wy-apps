@@ -1,5 +1,4 @@
 import datetime as dt
-import os
 from time import sleep
 from typing import Callable
 
@@ -16,7 +15,6 @@ class OpenLDBWSClient:
     _request_delay = 5  # seconds - prevent us from hammering the API by accident
 
     def __init__(self) -> None:
-        token = os.environ.get("OPENLDBWS_TOKEN")
         header = xsd.Element(
             "{http://thalesgroup.com/RTTI/2013-11-28/Token/types}AccessToken",
             xsd.ComplexType([
