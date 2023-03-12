@@ -3,29 +3,9 @@ import datetime as dt
 import os
 from time import sleep
 
-import requests
-
 from client import ON_TIME, OpenLDBWSClient, expected_time, minutes_diff
 from get_departure_board import departure_board
-
-
-class Notifier:
-    _filename = r"C:\Users\User\OneDrive\Documents\pushover.txt"
-    _url = "https://api.pushover.net/1/messages.json"
-
-    def __init__(self) -> None:
-        with open(Notifier._filename) as f:
-            content = [line.strip() for line in f.readlines()]
-        if len(content) != 2:
-            raise ValueError(f"Expecting two lines in file '{Notifier._filename}'. Instead have {len(content)}")
-        self._token, self._user = content
-
-    def notify(self, msg: str) -> None:
-        requests.post(Notifier._url, data={
-            "token": self._token,
-            "user": self._user,
-            "message": msg,
-        })
+from notifier import Notifier
 
 
 def monitor(

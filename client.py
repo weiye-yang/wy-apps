@@ -6,6 +6,8 @@ from typing import Callable
 from zeep import Client, Settings, xsd
 from zeep.plugins import HistoryPlugin
 
+from settings import API_TOKEN
+
 ON_TIME = "On time"
 
 
@@ -24,7 +26,7 @@ class OpenLDBWSClient:
                 )
             ])
         )
-        self._soap_headers = [header(TokenValue=token)]
+        self._soap_headers = [header(TokenValue=API_TOKEN)]
 
         wsdl = "http://lite.realtime.nationalrail.co.uk/OpenLDBWS/wsdl.aspx?ver=2021-11-01"
         self._client = Client(wsdl=wsdl, settings=Settings(strict=False), plugins=[HistoryPlugin()])
