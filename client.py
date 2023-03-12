@@ -1,4 +1,5 @@
 import datetime as dt
+import os
 from time import sleep
 from typing import Callable
 
@@ -10,14 +11,10 @@ ON_TIME = "On time"
 
 class OpenLDBWSClient:
     # One-line .txt containing token for the API. Let's not include it in the repo
-    _filename = r"C:\Users\User\OneDrive\Documents\OpenLDBWS.txt"
     _request_delay = 5  # seconds - prevent us from hammering the API by accident
 
     def __init__(self) -> None:
-        with open(OpenLDBWSClient._filename) as f:
-            content = [line.strip() for line in f.readlines()]
-        if len(content) != 1:
-            raise ValueError(f"Expecting only one line in file '{OpenLDBWSClient._filename}'. Instead have {len(content)}")
+        token = os.environ.get("OPENLDBWS_TOKEN")
         header = xsd.Element(
             "{http://thalesgroup.com/RTTI/2013-11-28/Token/types}AccessToken",
             xsd.ComplexType([
@@ -27,7 +24,7 @@ class OpenLDBWSClient:
                 )
             ])
         )
-        self._soap_headers = [header(TokenValue=content[0])]
+        self._soap_headers = [header(TokenValue=token)]
 
         wsdl = "http://lite.realtime.nationalrail.co.uk/OpenLDBWS/wsdl.aspx?ver=2021-11-01"
         self._client = Client(wsdl=wsdl, settings=Settings(strict=False), plugins=[HistoryPlugin()])
