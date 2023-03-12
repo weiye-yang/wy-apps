@@ -4,8 +4,8 @@ import os
 from time import sleep
 
 from client import ON_TIME, OpenLDBWSClient, expected_time, minutes_diff
-from get_departure_board import departure_board
-from notifier import pushover_notify
+from departure_board import departure_board
+from notifications import pushover_notify
 
 
 def monitor(
