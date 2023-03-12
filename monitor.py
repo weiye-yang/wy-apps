@@ -29,7 +29,11 @@ def monitor(
         print(f"[{datetime_str}] Status of {scheduled} service from {res.locationName} to {res.filterLocationName}:")
         departure = service[0]
         departure_time = expected_time(departure.std, departure.etd)
-        print(f"Expected departure: {departure_time}")
+        if departure.etd == ON_TIME:
+            print(f"Expected departure: {departure_time} (ON TIME)")
+        else:
+            print(f"Expected departure: {departure_time} (DELAYED)")
+            pushover_notify(f"{crs_from}->{crs_to} {scheduled} service delayed; expected {departure.etd}")
 
         calling_points = departure.subsequentCallingPoints.callingPointList[0].callingPoint
         arrival = [a for a in calling_points if a.crs == crs_to][0]
@@ -37,9 +41,6 @@ def monitor(
         print(f"Expected arrival: {arrival_time}")
 
         print(f"Journey duration: {minutes_diff(departure_time, arrival_time)} minutes")
-
-        if departure.etd != ON_TIME:
-            pushover_notify(f"{crs_from}->{crs_to} {scheduled} service delayed; expected {departure.etd}")
 
         print(f"Sleeping for {repeat_seconds} seconds...")
         sleep(repeat_seconds)
