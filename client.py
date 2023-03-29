@@ -1,6 +1,6 @@
 import datetime as dt
 from time import sleep
-from typing import Callable
+from typing import Callable, Optional
 
 from zeep import Client, Settings, xsd
 from zeep.plugins import HistoryPlugin
@@ -55,16 +55,20 @@ class OpenLDBWSClient:
         )
 
 
-def parse_time(hhmm: str) -> dt.time:
+def parse_time(hhmm: str) -> Optional[dt.time]:
     parts = hhmm.split(":")
     if len(parts) != 2:
-        raise ValueError(f"Cannot parse time {hhmm}")
+        return None  # Cancelled/Delayed
     return dt.time(int(parts[0]), int(parts[1]))
 
 
-def minutes_diff(before: str, after: str) -> int:
+def minutes_diff(before: str, after: str) -> Optional[int]:
     before_time = parse_time(before)
+    if before_time is None:
+        return None
     after_time = parse_time(after)
+    if after_time is None:
+        return None
 
     # Arbitrary date. But if after time is earlier, then assume it is the next day
     before_dt = dt.datetime.combine(dt.date(1, 1, 1), before_time)
