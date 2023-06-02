@@ -49,9 +49,13 @@ def monitor(
 def main(crs_from: str, crs_to: str, repeat_seconds: int) -> None:
     if repeat_seconds < 0:
         raise ValueError(f"repeat_seconds is {repeat_seconds}, but should be non-negative")
-    departure_board(crs_from=crs_from, crs_to=crs_to)
+    board = departure_board(crs_from=crs_from, crs_to=crs_to)
     print("")
-    default_time = "10:21"
+    if len(board) == 0:
+        print("No services found")
+
+    fastest_service = min(board, key=lambda x: x[1])
+    default_time = fastest_service[0].std
     scheduled = input(f"Enter scheduled time to monitor as hh:mm [default {default_time}]: ").strip()
     if not scheduled:
         scheduled = default_time
