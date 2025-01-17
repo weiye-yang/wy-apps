@@ -4,7 +4,7 @@ import os
 from time import sleep
 
 from client import ON_TIME, OpenLDBWSClient, expected_time, minutes_diff
-from departure_board import departure_board
+from rail_departure_board import departure_board
 from notifications import pushover_notify
 
 
