@@ -48,4 +48,3 @@ if __name__ == "__main__":
     parser.add_argument("--to", default="PAD")
     args = parser.parse_args()
     main(crs_from=args.fr, crs_to=args.to)
-    os.system("pause")

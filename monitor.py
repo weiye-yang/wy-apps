@@ -70,4 +70,3 @@ if __name__ == "__main__":
     parser.add_argument("--repeat_seconds", type=int, default=0)
     args = parser.parse_args()
     main(crs_from=args.crs_from, crs_to=args.crs_to, repeat_seconds=args.repeat_seconds)
-    os.system("pause")
