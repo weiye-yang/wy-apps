@@ -9,7 +9,7 @@ To use the service, you will need a token which is available by
 signing up at the following URL:
 * https://realtime.nationalrail.co.uk/OpenLDBWSRegistration/
 
-You will need to add this as an `API_TOKEN` environment variable. You can add it to
+You will need to add this as an `RAIL_TOKEN` environment variable. You can add it to
 a `.env` file in the root directory which is loaded into the environment variables
 by the `python-dotenv` package.
 
