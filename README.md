@@ -32,7 +32,7 @@ later version, edit `client.py` and change the `wsdl` argument.
 Support
 -------
 
-This code has been tested on Python 3.10.4.
+This code has been tested on Python 3.12.6.
 
 For support and questions with using the OpenLDBWS, please use the
 forum at the following URL:
