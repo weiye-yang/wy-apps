@@ -1,3 +1,24 @@
+Creating a batch file on Windows
+========================
+E.g. `rail_monitor.bat`:
+```commandline
+@echo off
+cd %homedrive%%homepath%\PycharmProjects\wy-apps
+.venv\scripts\python.exe -m open_ldbws.rail_monitor --repeat_seconds 300
+pause
+```
+
+Phone Notifications
+========================
+
+For phone push notifications, you will need to set up a Pushover account:
+* https://pushover.net/
+
+And add the token and user id as environment variables `PUSHOVER_TOKEN` and 
+`PUSHOVER_USER` respectively. You can add it to
+a `.env` file in the root directory which is loaded into the environment variables
+by the `python-dotenv` package.
+
 OpenLDBWS Rail Tools
 ========================
 
@@ -9,15 +30,7 @@ To use the service, you will need a token which is available by
 signing up at the following URL:
 * https://realtime.nationalrail.co.uk/OpenLDBWSRegistration/
 
-You will need to add this as an `RAIL_TOKEN` environment variable. You can add it to
-a `.env` file in the root directory which is loaded into the environment variables
-by the `python-dotenv` package.
-
-For phone push notifications, you will also need to set up a Pushover account:
-* https://pushover.net/
-
-And add the token and user id as environment variables `PUSHOVER_TOKEN` and 
-`PUSHOVER_USER` respectively.
+You will need to add this as an `RAIL_TOKEN` environment variable.
 
 Updating the WSDL
 -----------------
