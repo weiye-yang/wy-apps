@@ -16,6 +16,8 @@ def main(urpn: str) -> None:
     content = requests.get(url).text
     soup = BeautifulSoup(content, features="html.parser")
     next_collection_div = soup.find("div", {"class": "widget-bin-collections"})
+    if next_collection_div is None:
+        raise ValueError("Could not find Next Collection div")
     body = next_collection_div.find("tbody")
 
     results = defaultdict(set)
