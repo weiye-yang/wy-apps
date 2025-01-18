@@ -28,9 +28,10 @@ def main(urpn: str) -> None:
     tomorrow = dt.date.today() + relativedelta(days=1)
     tomorrow_bins = results.get(tomorrow)
     if tomorrow_bins is None:
-        print(f"No bins collected tomorrow {tomorrow}")
+        message = f"No bins collected on {tomorrow}"
     else:
-        print(f"Bins collected tomorrow {tomorrow}: {tomorrow_bins}")
+        message = f"Bins collected on {tomorrow}: {tomorrow_bins}"
+    print(message)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
