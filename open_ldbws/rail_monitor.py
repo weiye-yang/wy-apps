@@ -1,11 +1,10 @@
 import argparse
 import datetime as dt
-import os
 from time import sleep
 
-from client import ON_TIME, OpenLDBWSClient, expected_time, minutes_diff
-from rail_departure_board import departure_board
 from notifications import pushover_notify
+from open_ldbws.client import ON_TIME, OpenLDBWSClient, expected_time, minutes_diff
+from open_ldbws.rail_departure_board import departure_board
 
 
 def monitor(

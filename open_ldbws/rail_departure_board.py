@@ -1,9 +1,8 @@
 import argparse
 import datetime as dt
-import os
-from typing import Any, List, Optional, Tuple
+from typing import Any, List, Tuple
 
-from client import OpenLDBWSClient, expected_time, minutes_diff
+from open_ldbws.client import OpenLDBWSClient, expected_time, minutes_diff
 
 
 def departure_board(crs_from: str, crs_to: str) -> List[Tuple[Any, float]]:
