@@ -35,19 +35,19 @@ def bin_collection_table(uprn: str) -> dict[dt.date, set[CollectionType]]:
     return results
 
 
-def main(uprn: str) -> None:
+def main(uprn: str, days_ahead: int) -> None:
     results = bin_collection_table(uprn)
     if not results:
         raise ValueError("No bin collection results found")
 
-    tomorrow = dt.date.today() + relativedelta(days=1)
-    bins = results.get(tomorrow, set())
+    date_to_check = dt.date.today() + relativedelta(days=days_ahead)
+    bins = results.get(date_to_check, set())
     num_bins = len(bins)
     if num_bins == 0:
-        message = f"No bin collection on {tomorrow}"
+        message = f"No bin collection on {date_to_check}"
     else:
         bins_str = ", ".join(sorted(bins))
-        message = f"{num_bins} bin collection(s) on {tomorrow}: {bins_str}"
+        message = f"{num_bins} bin collection(s) on {date_to_check}: {bins_str}"
         pushover_notify(message)
     print(message)
 
@@ -55,5 +55,6 @@ def main(uprn: str) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--uprn", default=UPRN_DEFAULT)
+    parser.add_argument("--days_ahead", default=1)
     args = parser.parse_args()
-    main(args.uprn)
+    main(args.uprn, args.days_ahead)
