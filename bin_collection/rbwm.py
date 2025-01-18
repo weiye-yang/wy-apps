@@ -11,7 +11,10 @@ from notifications import pushover_notify
 from settings import URPN_DEFAULT
 
 
-def bin_collection_table(urpn: str) -> dict[dt.date, set[str]]:
+class CollectionType(str):
+    pass
+
+def bin_collection_table(urpn: str) -> dict[dt.date, set[CollectionType]]:
     url = "https://forms.rbwm.gov.uk/bincollections?uprn=" + urpn
     content = requests.get(url).text
     soup = BeautifulSoup(content, features="html.parser")
@@ -21,14 +24,14 @@ def bin_collection_table(urpn: str) -> dict[dt.date, set[str]]:
     body = next_collection_div.find("tbody")
     if not isinstance(body, Tag):
         raise ValueError("Could not find collection body")
-    results: dict[dt.date, set[str]] = defaultdict(set)
+    results: dict[dt.date, set[CollectionType]] = defaultdict(set)
     for tr in body.find_all("tr"):
         if isinstance(tr, Tag):
             row = [tag.get_text() for tag in tr.find_all("td")]
             if len(row) != 2:
                 raise ValueError(f"Unexpected <tr> {row}")
             row_date = parse(row[1]).date()
-            results[row_date].add(row[0])
+            results[row_date].add(CollectionType(row[0]))
     return results
 
 
