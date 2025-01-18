@@ -3,7 +3,7 @@ import datetime as dt
 from collections import defaultdict
 
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
 
@@ -22,11 +22,12 @@ def main(urpn: str) -> None:
 
     results = defaultdict(set)
     for tr in body.find_all("tr"):
-        row = [tag.get_text() for tag in tr.find_all("td")]
-        if len(row) != 2:
-            raise ValueError(f"Unexpected <tr> {row}")
-        row_date = parse(row[1]).date()
-        results[row_date].add(row[0])
+        if isinstance(tr, Tag):
+            row = [tag.get_text() for tag in tr.find_all("td")]
+            if len(row) != 2:
+                raise ValueError(f"Unexpected <tr> {row}")
+            row_date = parse(row[1]).date()
+            results[row_date].add(row[0])
 
     tomorrow = dt.date.today() + relativedelta(days=1)
     bins = results.get(tomorrow, set())
