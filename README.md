@@ -30,7 +30,7 @@ To use the service, you will need a token which is available by
 signing up at the following URL:
 * https://realtime.nationalrail.co.uk/OpenLDBWSRegistration/
 
-You will need to add this as an `RAIL_TOKEN` environment variable.
+You will need to add this as a `RAIL_TOKEN` environment variable.
 
 Updating the WSDL
 -----------------
@@ -51,3 +51,10 @@ For support and questions with using the OpenLDBWS, please use the
 forum at the following URL:
  
  * https://groups.google.com/group/openraildata-talk
+
+
+Bin Collection Tracker
+========================
+Takes a UPRN (unique property reference number) - you can find yours at https://www.findmyaddress.co.uk/.
+Optionally you can create an environment variable `UPRN_DEFAULT` which
+becomes the default value used in this script.

@@ -8,14 +8,14 @@ from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
 
 from notifications import pushover_notify
-from settings import URPN_DEFAULT
+from settings import UPRN_DEFAULT
 
 
 class CollectionType(str):
     pass
 
-def bin_collection_table(urpn: str) -> dict[dt.date, set[CollectionType]]:
-    url = "https://forms.rbwm.gov.uk/bincollections?uprn=" + urpn
+def bin_collection_table(uprn: str) -> dict[dt.date, set[CollectionType]]:
+    url = "https://forms.rbwm.gov.uk/bincollections?uprn=" + uprn
     content = requests.get(url).text
     soup = BeautifulSoup(content, features="html.parser")
     next_collection_div = soup.find("div", {"class": "widget-bin-collections"})
@@ -35,8 +35,8 @@ def bin_collection_table(urpn: str) -> dict[dt.date, set[CollectionType]]:
     return results
 
 
-def main(urpn: str) -> None:
-    results = bin_collection_table(urpn)
+def main(uprn: str) -> None:
+    results = bin_collection_table(uprn)
     if not results:
         raise ValueError("No bin collection results found")
 
@@ -54,6 +54,6 @@ def main(urpn: str) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--urpn", default=URPN_DEFAULT)
+    parser.add_argument("--uprn", default=UPRN_DEFAULT)
     args = parser.parse_args()
-    main(args.urpn)
+    main(args.uprn)
