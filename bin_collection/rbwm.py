@@ -16,9 +16,11 @@ def main(urpn: str) -> None:
     content = requests.get(url).text
     soup = BeautifulSoup(content, features="html.parser")
     next_collection_div = soup.find("div", {"class": "widget-bin-collections"})
-    if next_collection_div is None:
+    if not isinstance(next_collection_div, Tag):
         raise ValueError("Could not find Next Collection div")
     body = next_collection_div.find("tbody")
+    if not isinstance(body, Tag):
+        raise ValueError("Could not find collection body")
 
     results = defaultdict(set)
     for tr in body.find_all("tr"):
@@ -28,6 +30,9 @@ def main(urpn: str) -> None:
                 raise ValueError(f"Unexpected <tr> {row}")
             row_date = parse(row[1]).date()
             results[row_date].add(row[0])
+
+    if not results:
+        raise ValueError("No bin collection results found")
 
     tomorrow = dt.date.today() + relativedelta(days=1)
     bins = results.get(tomorrow, set())
