@@ -16,7 +16,7 @@ class CollectionType(str):
 
 def bin_collection_table(uprn: str) -> dict[dt.date, set[CollectionType]]:
     url = "https://forms.rbwm.gov.uk/bincollections?uprn=" + uprn
-    content = requests.get(url).text
+    content = requests.get(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0"}).text
     soup = BeautifulSoup(content, features="html.parser")
     next_collection_div = soup.find("div", {"class": "widget-bin-collections"})
     if not isinstance(next_collection_div, Tag):
