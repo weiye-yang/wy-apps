@@ -22,7 +22,7 @@ by the `python-dotenv` package.
 OpenLDBWS Rail Tools
 ========================
 
-This repository uses the National Rail Live
+This tool uses the National Rail Live
 Departure Boards Web Service (OpenLDBWS), located at the following URL:
 * https://lite.realtime.nationalrail.co.uk/OpenLDBWS/
 
@@ -55,6 +55,7 @@ forum at the following URL:
 
 Bin Collection Tracker
 ========================
+Currenty supports only RBWM.
 Takes a UPRN (unique property reference number) - you can find yours at https://www.findmyaddress.co.uk/.
 Optionally you can create an environment variable `UPRN_DEFAULT` which
 becomes the default value used in this script.
